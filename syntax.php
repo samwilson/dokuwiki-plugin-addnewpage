@@ -83,18 +83,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         global $lang;
 
         if($mode == 'xhtml') {
-            $disablecache = null;
-            $namespaceinput = $this->_htmlNamespaceInput($data['namespace'], $disablecache);
-            if($namespaceinput === false) {
-                if($this->getConf('addpage_hideACL')) {
-                    $renderer->doc .= '';
-                } else {
-                    $renderer->doc .= $this->getLang('nooption');
-                }
-                return true;
-            }
-            if($disablecache) $renderer->info['cache'] = false;
-
+            $namespaceinput = $this->_htmlNamespaceInput($data['namespace']);
             $newpagetemplateinput = $this->_htmlTemplateInput($data['newpagetemplates']);
 
             $form = '<div class="addnewpage">' . DOKU_LF
@@ -140,9 +129,8 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
      * @global string $ID The page ID
      * @return string Select element with appropriate NS selected.
      */
-    protected function _htmlNamespaceInput($dest_ns, &$disablecache) {
+    protected function _htmlNamespaceInput($dest_ns) {
         global $ID;
-        $disablecache = false;
 
         // If a NS has been provided:
         // Whether to hide the NS selection (otherwise, show only subnamespaces).
@@ -213,7 +201,6 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
                     '</option>';
             }
             $someopt = true;
-            $disablecache = true;
         }
 
         $ret .= '</select>';
